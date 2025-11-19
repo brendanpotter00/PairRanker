@@ -51,6 +51,13 @@ export function RankedResultView() {
     setShareDialogOpen(true);
   };
 
+  const handleShareUnranked = () => {
+    const payload = createPayloadFromList(currentList, 'unranked');
+    const url = createShareUrl(payload);
+    setShareUrl(url);
+    setShareDialogOpen(true);
+  };
+
   const handleReRank = () => {
     if (state.currentListId) {
       dispatch({
@@ -285,6 +292,14 @@ export function RankedResultView() {
           size="large"
         >
           Share Ranked List
+        </Button>
+        <Button
+          variant="outlined"
+          startIcon={<ShareIcon />}
+          onClick={handleShareUnranked}
+          size="large"
+        >
+          Share Unranked List
         </Button>
         <Button
           variant="outlined"
