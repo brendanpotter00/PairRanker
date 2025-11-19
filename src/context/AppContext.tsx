@@ -9,7 +9,7 @@ import {
 import { saveToLocalStorage, loadFromLocalStorage } from '../utils/localStorage';
 
 // Initial state factory
-function createInitialState(): AppState {
+export function createInitialState(): AppState {
   return {
     lists: [
       {
@@ -28,7 +28,7 @@ function createInitialState(): AppState {
 }
 
 // Reducer
-function appReducer(state: AppState, action: Action): AppState {
+export function appReducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'SET_TAB':
       return { ...state, currentTab: action.tab };
