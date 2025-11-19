@@ -139,7 +139,8 @@ export function getRankingProgress(state: RankingState, totalItems: number): {
   totalItems: number;
   percentComplete: number;
 } {
-  const processedItems = totalItems - state.pendingItemIds.length;
+  // Processed items = those already in sortedList + the current candidate being compared
+  const processedItems = state.sortedListItemIds.length + 1;
   const percentComplete = Math.round((processedItems / totalItems) * 100);
 
   return {

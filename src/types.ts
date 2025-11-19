@@ -54,7 +54,7 @@ export type Action =
   | { type: 'DELETE_UNRANKED_ITEM'; listId: string; itemId: string }
   | { type: 'START_RANKING'; listId: string }
   | { type: 'START_PARTIAL_RANKING'; listId: string }
-  | { type: 'MAKE_COMPARISON'; chooseCandiate: boolean }
+  | { type: 'MAKE_COMPARISON'; chooseCandidate: boolean }
   | { type: 'COMPLETE_RANKING' }
   | { type: 'DELETE_LIST'; listId: string }
   | { type: 'LOAD_SHARED_LIST'; list: List };

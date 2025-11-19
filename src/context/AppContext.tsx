@@ -201,7 +201,7 @@ function appReducer(state: AppState, action: Action): AppState {
 
       const newRankingState = processComparison(
         state.rankingState,
-        action.chooseCandiate
+        action.chooseCandidate
       );
 
       if (newRankingState === null) {
@@ -243,7 +243,8 @@ function appReducer(state: AppState, action: Action): AppState {
           }
 
           if (isPartialMode) {
-            // Partial mode: restore to ranked status, remove uninserted items
+            // Partial mode: update rankedData with current progress, remove uninserted items
+            const sortedListItemIds = state.rankingState?.sortedListItemIds || [];
             const uninsertedItemIds = state.rankingState?.pendingItemIds || [];
             const currentCandidateId = state.rankingState?.currentCandidateId;
             const itemsToRemove = currentCandidateId
@@ -253,6 +254,7 @@ function appReducer(state: AppState, action: Action): AppState {
             return {
               ...list,
               status: 'ranked',
+              rankedData: { itemIdsInOrder: sortedListItemIds },
               items: list.items.filter(item => !itemsToRemove.includes(item.id)),
               unrankedItems: undefined,
             };

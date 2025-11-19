@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   Box,
   Card,
@@ -36,15 +36,16 @@ export function RankingView() {
   const referenceItem = currentList.items.find((i) => i.id === referenceId);
 
   const isPartialMode = rankingState.mode === 'partial';
-  const totalItemsToRank = rankingState.pendingItemIds.length + 1; // pending + current candidate
-  const progress = getRankingProgress(rankingState, isPartialMode ? totalItemsToRank : currentList.items.length);
+  // Total items = already sorted + current candidate + pending
+  const totalItemsToRank = rankingState.sortedListItemIds.length + 1 + rankingState.pendingItemIds.length;
+  const progress = getRankingProgress(rankingState, totalItemsToRank);
 
-  const handleChoice = (chooseCandidate: boolean) => {
+  const handleChoice = useCallback((chooseCandidate: boolean) => {
     dispatch({
       type: 'MAKE_COMPARISON',
-      chooseCandiate: chooseCandidate,
+      chooseCandidate: chooseCandidate,
     });
-  };
+  }, [dispatch]);
 
   const handleExit = () => {
     setExitDialogOpen(true);
@@ -67,7 +68,7 @@ export function RankingView() {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [rankingState]);
+  }, [handleChoice]);
 
   if (!candidateItem || !referenceItem) {
     return (
