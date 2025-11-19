@@ -147,7 +147,18 @@ export function CurrentListView() {
                     edge="end"
                     onClick={() => handleDeleteItem(item.id)}
                     disabled={isRanking}
-                    sx={{ minWidth: 44, minHeight: 44 }}
+                    sx={{
+                      minWidth: 44,
+                      minHeight: 44,
+                      color: 'error.main',
+                      '&:hover': {
+                        bgcolor: 'error.light',
+                        color: 'error.dark',
+                      },
+                      '&.Mui-disabled': {
+                        color: 'action.disabled',
+                      },
+                    }}
                   >
                     <DeleteIcon />
                   </IconButton>
