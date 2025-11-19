@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { AppState, Action, List } from '../types';
+import { AppState } from '../types';
 
 // Import the reducer directly - we'll need to export it from AppContext
 // For now, we'll create a mock version to test the logic
