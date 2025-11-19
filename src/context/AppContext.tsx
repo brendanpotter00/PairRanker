@@ -204,9 +204,10 @@ function appReducer(state: AppState, action: Action): AppState {
         action.chooseCandidate
       );
 
-      if (newRankingState === null) {
-        // Ranking is complete - sortedListItemIds already contains all items
-        const finalOrder = state.rankingState.sortedListItemIds;
+      // Check if ranking is complete (no more pending items and no current candidate)
+      if (newRankingState.pendingItemIds.length === 0 && newRankingState.currentCandidateId === '') {
+        // Ranking is complete - sortedListItemIds contains all items
+        const finalOrder = newRankingState.sortedListItemIds;
 
         return {
           ...state,

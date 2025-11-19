@@ -12,7 +12,7 @@ export function initializeRankingState(items: ListItem[]): RankingState | null {
 
   return {
     sortedListItemIds: [itemIds[0]],
-    pendingItemIds: itemIds.slice(1),
+    pendingItemIds: itemIds.slice(2), // BUG FIX: exclude first two items (sorted[0] and current)
     currentCandidateId: itemIds[1],
     low: 0,
     high: 0,
@@ -59,7 +59,7 @@ export function initializePartialRankingState(
 export function processComparison(
   state: RankingState,
   chooseCandidate: boolean
-): RankingState | null {
+): RankingState {
   const { sortedListItemIds, pendingItemIds, currentCandidateId, low, high, mode } =
     state;
 
@@ -88,16 +88,23 @@ export function processComparison(
     // Get next candidate
     const newPendingItems = pendingItemIds.slice(1);
 
-    if (newPendingItems.length === 0) {
-      // Ranking is complete
-      return null;
+    if (newPendingItems.length === 0 && pendingItemIds.length === 0) {
+      // Ranking is complete - this was the last item, all inserted
+      return {
+        sortedListItemIds: newSortedList,
+        pendingItemIds: [],
+        currentCandidateId: '', // No more candidates
+        low: 0,
+        high: newSortedList.length - 1,
+        mode,
+      };
     }
 
     // Move to next candidate
     return {
       sortedListItemIds: newSortedList,
       pendingItemIds: newPendingItems,
-      currentCandidateId: pendingItemIds[0],
+      currentCandidateId: pendingItemIds[0], // Take first from OLD pending (becomes new current)
       low: 0,
       high: newSortedList.length - 1,
       mode,
