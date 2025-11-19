@@ -82,16 +82,16 @@ describe('RankedResultView', () => {
     vi.clearAllMocks();
 
     delete (window as any).location;
-    window.location = {
+    (window as any).location = {
       ...originalLocation,
       href: 'http://localhost:5173/',
       search: '',
-    } as Location;
+    };
   });
 
   afterEach(() => {
     localStorage.clear();
-    window.location = originalLocation;
+    (window as any).location = originalLocation;
   });
 
   describe('Rendering', () => {

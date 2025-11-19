@@ -183,14 +183,14 @@ describe('urlEncoding utilities', () => {
     beforeEach(() => {
       // Mock window.location
       delete (window as any).location;
-      window.location = {
+      (window as any).location = {
         ...originalLocation,
         href: 'http://localhost:5173/',
-      } as Location;
+      };
     });
 
     afterEach(() => {
-      window.location = originalLocation;
+      (window as any).location = originalLocation;
     });
 
     it('creates URL with data parameter', () => {

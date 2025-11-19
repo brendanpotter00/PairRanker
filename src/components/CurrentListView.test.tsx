@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CurrentListView } from './CurrentListView';
 import { AppProvider } from '../context/AppContext';
@@ -70,16 +70,16 @@ describe('CurrentListView', () => {
 
     // Mock window.location
     delete (window as any).location;
-    window.location = {
+    (window as any).location = {
       ...originalLocation,
       href: 'http://localhost:5173/',
       search: '',
-    } as Location;
+    };
   });
 
   afterEach(() => {
     localStorage.clear();
-    window.location = originalLocation;
+    (window as any).location = originalLocation;
   });
 
   describe('Rendering', () => {
