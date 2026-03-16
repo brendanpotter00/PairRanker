@@ -31,6 +31,7 @@ function renderWithContext(initialState?: Partial<AppState>) {
     ],
     currentListId: 'list-1',
     rankingState: defaultRankingState,
+    rankingStateHistory: [],
     currentTab: 'current',
     currentView: 'ranking',
     ...initialState,

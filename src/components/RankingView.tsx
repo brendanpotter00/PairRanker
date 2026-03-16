@@ -13,6 +13,7 @@ import {
   Button,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import UndoIcon from '@mui/icons-material/Undo';
 import { useApp } from '../context/AppContext';
 import { getCurrentComparison, getRankingProgress } from '../utils/rankingAlgorithm';
 
@@ -40,11 +41,17 @@ export function RankingView() {
   const totalItemsToRank = rankingState.sortedListItemIds.length + 1 + rankingState.pendingItemIds.length;
   const progress = getRankingProgress(rankingState, totalItemsToRank);
 
+  const canUndo = state.rankingStateHistory.length > 0;
+
   const handleChoice = useCallback((chooseCandidate: boolean) => {
     dispatch({
       type: 'MAKE_COMPARISON',
       chooseCandidate: chooseCandidate,
     });
+  }, [dispatch]);
+
+  const handleUndo = useCallback(() => {
+    dispatch({ type: 'UNDO_COMPARISON' });
   }, [dispatch]);
 
   const handleExit = () => {
@@ -59,7 +66,10 @@ export function RankingView() {
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'z' && canUndo) {
+        e.preventDefault();
+        handleUndo();
+      } else if (e.key === 'ArrowLeft') {
         handleChoice(true); // Choose left (candidate)
       } else if (e.key === 'ArrowRight') {
         handleChoice(false); // Choose right (reference)
@@ -68,7 +78,7 @@ export function RankingView() {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [handleChoice]);
+  }, [handleChoice, handleUndo, canUndo]);
 
   if (!candidateItem || !referenceItem) {
     return (
@@ -99,6 +109,14 @@ export function RankingView() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <IconButton onClick={handleExit} sx={{ minWidth: 44, minHeight: 44 }}>
             <ArrowBackIcon />
+          </IconButton>
+          <IconButton
+            onClick={handleUndo}
+            disabled={!canUndo}
+            sx={{ minWidth: 44, minHeight: 44 }}
+            title="Undo (Ctrl+Z)"
+          >
+            <UndoIcon />
           </IconButton>
           <Box sx={{ flex: 1 }}>
             <Typography variant="h6">

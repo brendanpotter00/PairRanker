@@ -22,6 +22,7 @@ export function createInitialState(): AppState {
     ],
     currentListId: null,
     rankingState: null,
+    rankingStateHistory: [],
     currentTab: 'current',
     currentView: 'currentList',
   };
@@ -164,6 +165,7 @@ export function appReducer(state: AppState, action: Action): AppState {
             : l
         ),
         rankingState,
+        rankingStateHistory: [],
         currentView: 'ranking',
       };
     }
@@ -192,6 +194,7 @@ export function appReducer(state: AppState, action: Action): AppState {
             : l
         ),
         rankingState,
+        rankingStateHistory: [],
         currentView: 'ranking',
       };
     }
@@ -222,13 +225,25 @@ export function appReducer(state: AppState, action: Action): AppState {
               : list
           ),
           rankingState: null,
+          rankingStateHistory: [],
           currentView: 'rankedResult',
         };
       }
 
       return {
         ...state,
+        rankingStateHistory: [...state.rankingStateHistory.slice(-49), state.rankingState],
         rankingState: newRankingState,
+      };
+    }
+
+    case 'UNDO_COMPARISON': {
+      if (state.rankingStateHistory.length === 0) return state;
+      const previousState = state.rankingStateHistory[state.rankingStateHistory.length - 1];
+      return {
+        ...state,
+        rankingState: previousState,
+        rankingStateHistory: state.rankingStateHistory.slice(0, -1),
       };
     }
 
@@ -265,6 +280,7 @@ export function appReducer(state: AppState, action: Action): AppState {
           }
         }),
         rankingState: null,
+        rankingStateHistory: [],
         currentView: isPartialMode ? 'rankedResult' : 'currentList',
       };
     }

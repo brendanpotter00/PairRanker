@@ -26,6 +26,7 @@ describe('AppContext Reducer', () => {
       ],
       currentListId: 'list-1',
       rankingState: null,
+      rankingStateHistory: [],
       currentTab: 'current',
       currentView: 'currentList',
     };

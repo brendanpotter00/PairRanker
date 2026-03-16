@@ -32,6 +32,7 @@ export type AppState = {
   lists: List[];
   currentListId: string | null;
   rankingState: RankingState | null;
+  rankingStateHistory: RankingState[];
   currentTab: 'current' | 'myLists';
   currentView: 'currentList' | 'ranking' | 'rankedResult';
 };
@@ -57,4 +58,5 @@ export type Action =
   | { type: 'MAKE_COMPARISON'; chooseCandidate: boolean }
   | { type: 'COMPLETE_RANKING' }
   | { type: 'DELETE_LIST'; listId: string }
+  | { type: 'UNDO_COMPARISON' }
   | { type: 'LOAD_SHARED_LIST'; list: List };

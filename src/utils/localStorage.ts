@@ -7,7 +7,8 @@ const STORAGE_KEY = 'pairwise-ranker-state';
  */
 export function saveToLocalStorage(state: AppState): void {
   try {
-    const serialized = JSON.stringify(state);
+    const { rankingStateHistory: _, ...persistedState } = state;
+    const serialized = JSON.stringify(persistedState);
     localStorage.setItem(STORAGE_KEY, serialized);
   } catch (error) {
     console.error('Error saving to localStorage:', error);
@@ -23,7 +24,8 @@ export function loadFromLocalStorage(): AppState | null {
     if (serialized === null) {
       return null;
     }
-    return JSON.parse(serialized) as AppState;
+    const parsed = JSON.parse(serialized);
+    return { ...parsed, rankingStateHistory: [] } as AppState;
   } catch (error) {
     console.error('Error loading from localStorage:', error);
     return null;

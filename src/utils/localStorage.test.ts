@@ -18,6 +18,7 @@ describe('localStorage utilities', () => {
     ],
     currentListId: 'test-list',
     rankingState: null,
+    rankingStateHistory: [],
     currentTab: 'current',
     currentView: 'currentList',
   };
@@ -41,7 +42,9 @@ describe('localStorage utilities', () => {
       expect(saved).not.toBeNull();
 
       const parsed = JSON.parse(saved!);
-      expect(parsed).toEqual(mockState);
+      // rankingStateHistory is excluded from persistence (temporary undo data)
+      const { rankingStateHistory: _, ...expectedPersisted } = mockState;
+      expect(parsed).toEqual(expectedPersisted);
     });
 
     it('serializes complex state correctly', () => {
