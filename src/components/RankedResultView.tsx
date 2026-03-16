@@ -73,10 +73,13 @@ export function RankedResultView() {
 
   const handleAddItem = () => {
     if (newItemInput.trim() && state.currentListId) {
-      dispatch({
-        type: 'ADD_ITEM_TO_RANKED_LIST',
-        listId: state.currentListId,
-        text: newItemInput,
+      const items = newItemInput.split(',').map(s => s.trim()).filter(Boolean);
+      items.forEach(text => {
+        dispatch({
+          type: 'ADD_ITEM_TO_RANKED_LIST',
+          listId: state.currentListId!,
+          text,
+        });
       });
       setNewItemInput('');
     }
@@ -220,7 +223,7 @@ export function RankedResultView() {
         <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
           <TextField
             fullWidth
-            placeholder="Add a new item to insert into your ranking"
+            placeholder="Add items (comma-separated for multiple)"
             value={newItemInput}
             onChange={(e) => setNewItemInput(e.target.value)}
             onKeyPress={handleKeyPress}

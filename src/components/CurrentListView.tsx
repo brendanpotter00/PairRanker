@@ -40,10 +40,13 @@ export function CurrentListView() {
 
   const handleAddItem = () => {
     if (itemInput.trim() && state.currentListId) {
-      dispatch({
-        type: 'ADD_ITEM',
-        listId: state.currentListId,
-        text: itemInput,
+      const items = itemInput.split(',').map(s => s.trim()).filter(Boolean);
+      items.forEach(text => {
+        dispatch({
+          type: 'ADD_ITEM',
+          listId: state.currentListId!,
+          text,
+        });
       });
       setItemInput('');
     }
@@ -118,7 +121,7 @@ export function CurrentListView() {
         <Box sx={{ display: 'flex', gap: 1 }}>
           <TextField
             fullWidth
-            placeholder="Type an item and press Enter"
+            placeholder="Add items (comma-separated for multiple)"
             value={itemInput}
             onChange={(e) => setItemInput(e.target.value)}
             onKeyPress={handleKeyPress}
