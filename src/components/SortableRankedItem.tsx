@@ -18,12 +18,11 @@ function getMedalColor(index: number): string {
 }
 
 interface SortableRankedItemProps {
-  id: string;
   item: ListItemType;
   index: number;
 }
 
-export function SortableRankedItem({ id, item, index }: SortableRankedItemProps) {
+export function SortableRankedItem({ item, index }: SortableRankedItemProps) {
   const {
     attributes,
     listeners,
@@ -31,7 +30,7 @@ export function SortableRankedItem({ id, item, index }: SortableRankedItemProps)
     transform,
     transition,
     isDragging,
-  } = useSortable({ id });
+  } = useSortable({ id: item.id });
 
   const medalColor = getMedalColor(index);
 

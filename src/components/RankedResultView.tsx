@@ -165,6 +165,7 @@ export function RankedResultView() {
       const itemIds = currentList.rankedData.itemIdsInOrder;
       const oldIndex = itemIds.indexOf(active.id as string);
       const newIndex = itemIds.indexOf(over.id as string);
+      if (oldIndex < 0 || newIndex < 0) return;
       dispatch({
         type: 'REORDER_RANKED_LIST',
         listId: currentList.id,
@@ -208,7 +209,6 @@ export function RankedResultView() {
                 return (
                   <SortableRankedItem
                     key={item.id}
-                    id={item.id}
                     item={item}
                     index={index}
                   />

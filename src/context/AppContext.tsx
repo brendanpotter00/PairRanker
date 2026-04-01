@@ -327,6 +327,7 @@ export function appReducer(state: AppState, action: Action): AppState {
         lists: state.lists.map((list) => {
           if (list.id !== action.listId || !list.rankedData) return list;
           const newOrder = [...list.rankedData.itemIdsInOrder];
+          if (action.oldIndex < 0 || action.newIndex < 0 || action.oldIndex >= newOrder.length || action.newIndex >= newOrder.length) return list;
           const [removed] = newOrder.splice(action.oldIndex, 1);
           newOrder.splice(action.newIndex, 0, removed);
           return {
