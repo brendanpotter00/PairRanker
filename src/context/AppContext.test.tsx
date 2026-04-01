@@ -518,6 +518,87 @@ describe('AppContext Reducer', () => {
     });
   });
 
+  describe('REORDER_RANKED_LIST', () => {
+    it('reorders items by moving an item to a new position', () => {
+      const rankedState: AppState = {
+        ...initialState,
+        lists: [
+          {
+            ...initialState.lists[0],
+            status: 'ranked',
+            rankedData: { itemIdsInOrder: ['a', 'b', 'c'] },
+          },
+        ],
+      };
+
+      const action: Action = { type: 'REORDER_RANKED_LIST', listId: 'list-1', oldIndex: 0, newIndex: 2 };
+      const result = appReducer(rankedState, action);
+
+      expect(result.lists[0].rankedData?.itemIdsInOrder).toEqual(['b', 'c', 'a']);
+    });
+
+    it('moves item from end to beginning', () => {
+      const rankedState: AppState = {
+        ...initialState,
+        lists: [
+          {
+            ...initialState.lists[0],
+            status: 'ranked',
+            rankedData: { itemIdsInOrder: ['a', 'b', 'c'] },
+          },
+        ],
+      };
+
+      const action: Action = { type: 'REORDER_RANKED_LIST', listId: 'list-1', oldIndex: 2, newIndex: 0 };
+      const result = appReducer(rankedState, action);
+
+      expect(result.lists[0].rankedData?.itemIdsInOrder).toEqual(['c', 'a', 'b']);
+    });
+
+    it('does nothing when listId does not match', () => {
+      const rankedState: AppState = {
+        ...initialState,
+        lists: [
+          {
+            ...initialState.lists[0],
+            status: 'ranked',
+            rankedData: { itemIdsInOrder: ['a', 'b', 'c'] },
+          },
+        ],
+      };
+
+      const action: Action = { type: 'REORDER_RANKED_LIST', listId: 'nonexistent', oldIndex: 0, newIndex: 2 };
+      const result = appReducer(rankedState, action);
+
+      expect(result.lists[0].rankedData?.itemIdsInOrder).toEqual(['a', 'b', 'c']);
+    });
+
+    it('does nothing when list has no rankedData', () => {
+      const action: Action = { type: 'REORDER_RANKED_LIST', listId: 'list-1', oldIndex: 0, newIndex: 1 };
+      const result = appReducer(initialState, action);
+
+      expect(result.lists[0].rankedData).toBeUndefined();
+    });
+
+    it('swaps adjacent items correctly', () => {
+      const rankedState: AppState = {
+        ...initialState,
+        lists: [
+          {
+            ...initialState.lists[0],
+            status: 'ranked',
+            rankedData: { itemIdsInOrder: ['a', 'b', 'c', 'd'] },
+          },
+        ],
+      };
+
+      const action: Action = { type: 'REORDER_RANKED_LIST', listId: 'list-1', oldIndex: 1, newIndex: 2 };
+      const result = appReducer(rankedState, action);
+
+      expect(result.lists[0].rankedData?.itemIdsInOrder).toEqual(['a', 'c', 'b', 'd']);
+    });
+  });
+
   describe('LOAD_SHARED_LIST', () => {
     it('loads a shared list and sets it as current', () => {
       const sharedList: List = {

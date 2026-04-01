@@ -427,6 +427,14 @@ describe('RankedResultView', () => {
     });
   });
 
+  describe('Drag and Drop Reordering', () => {
+    it('renders drag handles for each ranked item', () => {
+      renderWithContext();
+      const dragHandles = screen.getAllByTestId('DragIndicatorIcon');
+      expect(dragHandles).toHaveLength(3);
+    });
+  });
+
   describe('Integration Scenarios', () => {
     it('adds multiple unranked items and shows correct count', async () => {
       renderWithContext();

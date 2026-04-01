@@ -18,10 +18,26 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  DndContext,
+  closestCenter,
+  TouchSensor,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 import { useApp } from '../context/AppContext';
 import { ShareDialog } from './ShareDialog';
 import { InsertItemsDialog } from './InsertItemsDialog';
 import { createShareUrl, createPayloadFromList } from '../utils/urlEncoding';
+import { SortableRankedItem } from './SortableRankedItem';
 
 export function RankedResultView() {
   const { state, dispatch } = useApp();
@@ -137,16 +153,24 @@ export function RankedResultView() {
 
   const hasUnrankedItems = currentList.unrankedItems && currentList.unrankedItems.length > 0;
 
-  const getMedalColor = (index: number): string => {
-    switch (index) {
-      case 0:
-        return '#FFD700'; // Gold
-      case 1:
-        return '#C0C0C0'; // Silver
-      case 2:
-        return '#CD7F32'; // Bronze
-      default:
-        return 'transparent';
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id && currentList.rankedData) {
+      const itemIds = currentList.rankedData.itemIdsInOrder;
+      const oldIndex = itemIds.indexOf(active.id as string);
+      const newIndex = itemIds.indexOf(over.id as string);
+      dispatch({
+        type: 'REORDER_RANKED_LIST',
+        listId: currentList.id,
+        oldIndex,
+        newIndex,
+      });
     }
   };
 
@@ -169,50 +193,30 @@ export function RankedResultView() {
       </Box>
 
       <Paper sx={{ mb: 3 }}>
-        <List>
-          {rankedItems.map((item, index) => {
-            if (!item) return null;
-            const medalColor = getMedalColor(index);
-
-            return (
-              <ListItem
-                key={item.id}
-                sx={{
-                  borderLeft: medalColor !== 'transparent' ? 4 : 0,
-                  borderColor: medalColor,
-                  bgcolor:
-                    index < 3
-                      ? `${medalColor}15`
-                      : 'transparent',
-                }}
-              >
-                <ListItemText
-                  primary={
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          minWidth: 40,
-                          fontWeight: index < 3 ? 'bold' : 'normal',
-                        }}
-                      >
-                        {index + 1}.
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          fontWeight: index < 3 ? 'bold' : 'normal',
-                        }}
-                      >
-                        {item.text}
-                      </Typography>
-                    </Box>
-                  }
-                />
-              </ListItem>
-            );
-          })}
-        </List>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={currentList.rankedData.itemIdsInOrder}
+            strategy={verticalListSortingStrategy}
+          >
+            <List>
+              {rankedItems.map((item, index) => {
+                if (!item) return null;
+                return (
+                  <SortableRankedItem
+                    key={item.id}
+                    id={item.id}
+                    item={item}
+                    index={index}
+                  />
+                );
+              })}
+            </List>
+          </SortableContext>
+        </DndContext>
       </Paper>
 
       {/* Add New Items Section */}
