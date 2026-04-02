@@ -59,4 +59,5 @@ export type Action =
   | { type: 'COMPLETE_RANKING' }
   | { type: 'DELETE_LIST'; listId: string }
   | { type: 'UNDO_COMPARISON' }
-  | { type: 'LOAD_SHARED_LIST'; list: List };
+  | { type: 'LOAD_SHARED_LIST'; list: List }
+  | { type: 'REORDER_RANKED_LIST'; listId: string; oldIndex: number; newIndex: number };
