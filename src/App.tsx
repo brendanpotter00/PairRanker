@@ -57,7 +57,7 @@ function AppContent() {
       // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }, []);
+  }, [dispatch]);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: 'current' | 'myLists') => {
     dispatch({ type: 'SET_TAB', tab: newValue });

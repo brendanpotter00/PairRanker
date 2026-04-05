@@ -92,7 +92,7 @@ describe('CurrentListView', () => {
 
     it('renders item input field', () => {
       renderWithContext();
-      const itemInput = screen.getByPlaceholderText(/type an item/i);
+      const itemInput = screen.getByPlaceholderText(/add items/i);
       expect(itemInput).toBeInTheDocument();
     });
 
@@ -192,7 +192,7 @@ describe('CurrentListView', () => {
   describe('Adding Items', () => {
     it('adds item when Add button clicked', async () => {
       renderWithContext();
-      const itemInput = screen.getByPlaceholderText(/type an item/i);
+      const itemInput = screen.getByPlaceholderText(/add items/i);
       const addButton = screen.getByRole('button', { name: /add/i });
 
       await userEvent.type(itemInput, 'New Item');
@@ -205,7 +205,7 @@ describe('CurrentListView', () => {
 
     it('adds item when Enter key pressed', async () => {
       renderWithContext();
-      const itemInput = screen.getByPlaceholderText(/type an item/i);
+      const itemInput = screen.getByPlaceholderText(/add items/i);
 
       await userEvent.type(itemInput, 'Another Item{Enter}');
 
@@ -216,7 +216,7 @@ describe('CurrentListView', () => {
 
     it('clears input after adding item', async () => {
       renderWithContext();
-      const itemInput = screen.getByPlaceholderText(/type an item/i) as HTMLInputElement;
+      const itemInput = screen.getByPlaceholderText(/add items/i) as HTMLInputElement;
       const addButton = screen.getByRole('button', { name: /add/i });
 
       await userEvent.type(itemInput, 'Test');
@@ -236,7 +236,7 @@ describe('CurrentListView', () => {
 
     it('trims whitespace from items', async () => {
       renderWithContext();
-      const itemInput = screen.getByPlaceholderText(/type an item/i);
+      const itemInput = screen.getByPlaceholderText(/add items/i);
       const addButton = screen.getByRole('button', { name: /add/i });
 
       await userEvent.type(itemInput, '  Whitespace Item  ');
@@ -263,7 +263,7 @@ describe('CurrentListView', () => {
         ],
       });
 
-      const itemInput = screen.getByPlaceholderText(/type an item/i);
+      const itemInput = screen.getByPlaceholderText(/add items/i);
       const addButton = screen.getByRole('button', { name: /add/i });
 
       expect(itemInput).toBeDisabled();
@@ -466,7 +466,7 @@ describe('CurrentListView', () => {
         ],
       });
 
-      const itemInput = screen.getByPlaceholderText(/type an item/i);
+      const itemInput = screen.getByPlaceholderText(/add items/i);
 
       await userEvent.type(itemInput, 'First{Enter}');
       await userEvent.type(itemInput, 'Second{Enter}');
@@ -495,7 +495,7 @@ describe('CurrentListView', () => {
       const rankButton = screen.getByRole('button', { name: /start ranking/i });
       expect(rankButton).toBeDisabled();
 
-      const itemInput = screen.getByPlaceholderText(/type an item/i);
+      const itemInput = screen.getByPlaceholderText(/add items/i);
       await userEvent.type(itemInput, 'Second{Enter}');
 
       await waitFor(() => {

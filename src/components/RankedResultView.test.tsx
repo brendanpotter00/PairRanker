@@ -184,12 +184,12 @@ describe('RankedResultView', () => {
   describe('Add New Items Section', () => {
     it('renders new item input', () => {
       renderWithContext();
-      expect(screen.getByPlaceholderText(/add a new item/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/add items/i)).toBeInTheDocument();
     });
 
     it('adds new item to unranked items list', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i);
+      const input = screen.getByPlaceholderText(/add items/i);
       const addButton = screen.getByRole('button', { name: /add/i });
 
       await userEvent.type(input, 'New Item');
@@ -203,7 +203,7 @@ describe('RankedResultView', () => {
 
     it('adds item on Enter key press', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i);
+      const input = screen.getByPlaceholderText(/add items/i);
 
       await userEvent.type(input, 'Another Item{Enter}');
 
@@ -214,7 +214,7 @@ describe('RankedResultView', () => {
 
     it('clears input after adding item', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i) as HTMLInputElement;
+      const input = screen.getByPlaceholderText(/add items/i) as HTMLInputElement;
       const addButton = screen.getByRole('button', { name: /add/i });
 
       await userEvent.type(input, 'Test');
@@ -233,7 +233,7 @@ describe('RankedResultView', () => {
 
     it('trims whitespace from new items', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i);
+      const input = screen.getByPlaceholderText(/add items/i);
       const addButton = screen.getByRole('button', { name: /add/i });
 
       await userEvent.type(input, '  Whitespace  ');
@@ -248,7 +248,7 @@ describe('RankedResultView', () => {
   describe('Unranked Items Display', () => {
     it('displays unranked items count', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i);
+      const input = screen.getByPlaceholderText(/add items/i);
 
       await userEvent.type(input, 'Item 1{Enter}');
       await userEvent.type(input, 'Item 2{Enter}');
@@ -260,7 +260,7 @@ describe('RankedResultView', () => {
 
     it('shows insert button when unranked items exist', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i);
+      const input = screen.getByPlaceholderText(/add items/i);
 
       await userEvent.type(input, 'New Item{Enter}');
 
@@ -271,7 +271,7 @@ describe('RankedResultView', () => {
 
     it('uses plural for multiple unranked items', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i);
+      const input = screen.getByPlaceholderText(/add items/i);
 
       await userEvent.type(input, 'Item 1{Enter}');
       await userEvent.type(input, 'Item 2{Enter}');
@@ -283,7 +283,7 @@ describe('RankedResultView', () => {
 
     it('deletes unranked item when delete clicked', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i);
+      const input = screen.getByPlaceholderText(/add items/i);
 
       await userEvent.type(input, 'To Delete{Enter}');
 
@@ -309,7 +309,7 @@ describe('RankedResultView', () => {
   describe('Insert Items Workflow', () => {
     it('starts partial ranking directly with single unranked item', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i);
+      const input = screen.getByPlaceholderText(/add items/i);
 
       await userEvent.type(input, 'Single Item{Enter}');
 
@@ -325,7 +325,7 @@ describe('RankedResultView', () => {
 
     it('opens insert dialog with multiple unranked items', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i);
+      const input = screen.getByPlaceholderText(/add items/i);
 
       await userEvent.type(input, 'Item 1{Enter}');
       await userEvent.type(input, 'Item 2{Enter}');
@@ -430,7 +430,7 @@ describe('RankedResultView', () => {
   describe('Integration Scenarios', () => {
     it('adds multiple unranked items and shows correct count', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i);
+      const input = screen.getByPlaceholderText(/add items/i);
 
       await userEvent.type(input, 'Item A{Enter}');
       await userEvent.type(input, 'Item B{Enter}');
@@ -446,7 +446,7 @@ describe('RankedResultView', () => {
 
     it('deletes one of multiple unranked items', async () => {
       renderWithContext();
-      const input = screen.getByPlaceholderText(/add a new item/i);
+      const input = screen.getByPlaceholderText(/add items/i);
 
       await userEvent.type(input, 'Keep Me{Enter}');
       await userEvent.type(input, 'Delete Me{Enter}');

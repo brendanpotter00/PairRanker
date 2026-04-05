@@ -48,6 +48,12 @@ export function RankedResultView() {
 
   const currentList = state.lists.find((l) => l.id === state.currentListId);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
   if (!currentList || !currentList.rankedData) {
     return (
       <Box sx={{ p: { xs: 2, md: 3 } }}>
@@ -152,12 +158,6 @@ export function RankedResultView() {
   const isFromSharedUrl = new URLSearchParams(window.location.search).has('data');
 
   const hasUnrankedItems = currentList.unrankedItems && currentList.unrankedItems.length > 0;
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;

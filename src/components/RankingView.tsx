@@ -23,6 +23,35 @@ export function RankingView() {
 
   const currentList = state.lists.find((l) => l.id === state.currentListId);
   const rankingState = state.rankingState;
+  const canUndo = state.rankingStateHistory.length > 0;
+
+  const handleChoice = useCallback((chooseCandidate: boolean) => {
+    dispatch({
+      type: 'MAKE_COMPARISON',
+      chooseCandidate: chooseCandidate,
+    });
+  }, [dispatch]);
+
+  const handleUndo = useCallback(() => {
+    dispatch({ type: 'UNDO_COMPARISON' });
+  }, [dispatch]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'z' && canUndo) {
+        e.preventDefault();
+        handleUndo();
+      } else if (e.key === 'ArrowLeft') {
+        handleChoice(true); // Choose left (candidate)
+      } else if (e.key === 'ArrowRight') {
+        handleChoice(false); // Choose right (reference)
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [handleChoice, handleUndo, canUndo]);
 
   if (!currentList || !rankingState) {
     return (
@@ -41,19 +70,6 @@ export function RankingView() {
   const totalItemsToRank = rankingState.sortedListItemIds.length + 1 + rankingState.pendingItemIds.length;
   const progress = getRankingProgress(rankingState, totalItemsToRank);
 
-  const canUndo = state.rankingStateHistory.length > 0;
-
-  const handleChoice = useCallback((chooseCandidate: boolean) => {
-    dispatch({
-      type: 'MAKE_COMPARISON',
-      chooseCandidate: chooseCandidate,
-    });
-  }, [dispatch]);
-
-  const handleUndo = useCallback(() => {
-    dispatch({ type: 'UNDO_COMPARISON' });
-  }, [dispatch]);
-
   const handleExit = () => {
     setExitDialogOpen(true);
   };
@@ -62,23 +78,6 @@ export function RankingView() {
     dispatch({ type: 'COMPLETE_RANKING' });
     setExitDialogOpen(false);
   };
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'z' && canUndo) {
-        e.preventDefault();
-        handleUndo();
-      } else if (e.key === 'ArrowLeft') {
-        handleChoice(true); // Choose left (candidate)
-      } else if (e.key === 'ArrowRight') {
-        handleChoice(false); // Choose right (reference)
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [handleChoice, handleUndo, canUndo]);
 
   if (!candidateItem || !referenceItem) {
     return (

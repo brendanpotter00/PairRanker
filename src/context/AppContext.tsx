@@ -54,7 +54,7 @@ export function appReducer(state: AppState, action: Action): AppState {
       };
     }
 
-    case 'SET_CURRENT_LIST':
+    case 'SET_CURRENT_LIST': {
       const list = state.lists.find((l) => l.id === action.listId);
       if (!list) return state;
 
@@ -65,6 +65,7 @@ export function appReducer(state: AppState, action: Action): AppState {
         currentView: list.status === 'ranked' ? 'rankedResult' : 'currentList',
         rankingState: null,
       };
+    }
 
     case 'UPDATE_LIST_NAME':
       return {
