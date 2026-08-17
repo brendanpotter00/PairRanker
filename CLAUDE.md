@@ -6,22 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Pairwise Ranker** is a front-end only React + TypeScript web application that implements pairwise ranking using a binary insertion sort algorithm. Users create lists and rank items by choosing between two items at a time. No backend is required - all data is stored in localStorage and can be shared via URL-encoded query parameters.
 
-## Commands
-
-```bash
-# Development server (runs on http://localhost:5173 or next available port)
-npm run dev
-
-# Production build (outputs to dist/)
-npm run build
-
-# Lint TypeScript/TSX files
-npm run lint
-
-# Preview production build
-npm run preview
-```
-
 ## Architecture
 
 ### State Management Pattern
@@ -133,14 +117,6 @@ lists: state.lists.map((list) =>
 - Process user comparison: `processComparison(rankingState, userChooseCandidate)`
 - Returns updated state or `null` when complete
 - Get current comparison items: `getCurrentComparison(rankingState)` returns `{ candidateId, referenceId }`
-
-## Key Files
-
-- **`src/context/AppContext.tsx`**: All state management, reducer with 15+ cases
-- **`src/types.ts`**: TypeScript definitions for entire app state
-- **`src/utils/rankingAlgorithm.ts`**: Binary insertion sort implementation
-- **`src/utils/urlEncoding.ts`**: Share URL encoding/decoding + ID generation
-- **`src/App.tsx`**: Root component with theme, tab navigation, and view routing
 
 ## Implementation Notes
 
